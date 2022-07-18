@@ -4,6 +4,8 @@ automated collection and parsing.
 To get this to work, you will have to collect your own AppCache
 file and rename to AppCache.txt or change the 
 filename = "AppCache.txt" to your filename. 
+
+It will provide a .csv file for easier navigation right now.
 '''
 
 import json
