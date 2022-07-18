@@ -5,6 +5,7 @@ While working through an interview process, I came across the old "Microsoft.Win
 Here is where I'll put my notes and script so far. This is *ongoing research*. 
 
 C:\Users\%USERNAME%\AppData\Local\Packages\Microsoft.Windows.Search_cw5n1h2txyewy\LocalState\DeviceSearchCache\AppCache[##################].txt 
+
 The 18 numbers at the end of the filename is the Windows filetime stamp of the iteration of AppCache. It appears that it may write every hour. 
 The file is in JSON format. It appears that the "Type:" is 5 if the "Value:" is an integer and 12 if it is a string. 
 ![Sample Screenshot](https://user-images.githubusercontent.com/88520889/179432469-de404371-80a4-4490-9b13-86d59ab8d54b.png)
@@ -21,7 +22,7 @@ The file is in JSON format. It appears that the "Type:" is 5 if the "Value:" is 
 |System.Identity|{'Value': 'Microsoft.BingWeather_8wekyb3d8bbwe', 'Type': 12}|Short name|
 |System.FileName|{'Value': 'vmware', 'Type': 12}|Actual filename without extension|
 |System.ConnectedSearch.JumpList|List of values, in Screenshot|Contains jumplists for some items that don't have jumplists in the normal location|
-|System.ConnectedSearch.VoiceCommandExamples|Unknown|Not sure yet, all my rows were blank.|
+|System.ConnectedSearch. VoiceCommandExamples|Unknown|Not sure yet, all my rows were blank.|
 |System.ItemType|Trusted Immersive|Options on my machine are "Trusted Immersive", "Immersive", or "Desktop"|
 |System.DateAccessed|133022364739230000|Date of access in Windows Filetime - not last access for all|
 |System.Tile.EncodedTargetPath|C:\Users\%USERNAME%\AppData\Local\Programs\Python\Python310\pythonw.exe|May be full file path or same as ParsingName|		
