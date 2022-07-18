@@ -31,4 +31,4 @@ The file is in JSON format. It appears that the "Type:" is 5 if the "Value:" is 
 If ParsingName starts with "6D809377-6AF0-444B-8957-A3773F02200E" or "7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E" that seems to refer to the folder "\Program Files (x86)\". Confirmed by both registry folder values (HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions) and looking at the full path of the executable. If it starts with "1AC14E77-02E7-4E5D-B744-2EB1AE5198B7" or "D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27" that seems to refer to System32 or SysWOW64. Last, if it starts with "F38BF404-1D43-42F2-9305-67DE0B28FC23", it is located in the C:\Windows folder.  
 It appears that "Tile.Background" has a common value of 16777215 on my machine for most applications and then some Windows applications have other larger values.
 
-133025763228816647
+I will be continuing to work on this as time allows. 
