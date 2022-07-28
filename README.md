@@ -39,6 +39,28 @@ Additional Notes:
 If ParsingName starts with `6D809377-6AF0-444B-8957-A3773F02200E` or `7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E` that seems to refer to the folder `C:\Program Files (x86)\`. Confirmed by both registry folder values (`HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`) and looking at the full path of the executable. If it starts with `1AC14E77-02E7-4E5D-B744-2EB1AE5198B7` or `D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27` that seems to refer to System32 or SysWOW64. Last, if it starts with `F38BF404-1D43-42F2-9305-67DE0B28FC23`, it is located in the `C:\Windows` folder.  
 It appears that `Tile.Background` has a common value of `16777215` on my machine for most applications and then some Windows applications have other larger values.
 
+
+## Settings Cache
+Appears to be default data related to searches that would call Windows data, troubleshooters, and system settings. Not every row has entries in every column and the parser for this breaks at the same row every time I run it and I haven't had time to troubleshoot yet. 
+*Parsed SettingsCache-output.csv will be* **INCOMPLETE**.
+
+
+Headers are:
+ParsingName, ActivationContext, SmallLogoPath, PageID, SettingID, HostID, Condition, Comment, and HighKeywords
+
+|Headers|Sample|Hypothesis|
+|---|---|---|
+|ParsingName|`Classic_{1498BF43-8A3E-4B9C-917B-C419E4501A62}.settingcontent-ms`|File identifier|
+|ActivationContext|`%windir%\system32\msdt.exe -id NetworkDiagnosticsInbound -ep CortanaSearch`|What is offered/returned|
+|SmallLogoPath|`%windir%\diagnostics\system\Networking\DiagPackage.dll,-20004`|Path to a logo|
+|PageID|`C58C4893-3BE0-4B45-ABB5-A63E4B8C8651`|Registry - SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace\ - Identifies as "Troubleshooting"|
+|SettingID|`1498BF43-8A3E-4B9C-917B-C419E4501A62`|Matches the ParsingName alphanumerics|
+|HostID|`12B1697E-D3A0-4DBC-B568-CCF64A3F934D`|Only two unique values through the list|
+|Condition|`shcond://v1#IsServer;1`|Windows Shell conditions cached?|
+|Comment|Find and fix problems with Windows Firewall|Default text that pops up in search when you search related keywords|
+|HighKeywords|windows firewall troubleshooter;troubleshoot windows firewall;troubleshoot firewall;network troubleshooter;troubleshoot network;fix firewall;fix network;network issues;network problems;firewall issues;firewall problems;incoming connections;inbound connections;troubleshooters|Keywords for Search optimizing?|
+
+
 ## Script Info
 
-I will be continuing to work on this as time allows. It is intended only for my research purposes at this time. You can run it from any folder on a Windows machine and it *should* pull the `AppCache#.txt` file from the host machine and copy it to a folder within the working directory along with the csv of simply parsed data. The `ConnectedSearch.Jumplists` needs more parsing but I wanted a quick way to pull on different machines so I could just copy one folder over. I am running this on Python 3.10.4. 
+I will be continuing to work on this as time allows. It is intended only for my research purposes at this time. You can run it from any folder on a Windows machine and it *should* pull the `DeviceSearchCache` folder contents from the host machine and copy it to a folder within the working directory along with the CSVs of simply parsed data. The `ConnectedSearch.Jumplists` needs more parsing but I wanted a quick way to pull on different machines so I could just copy one folder over. I am running this on Python 3.10.4. 
