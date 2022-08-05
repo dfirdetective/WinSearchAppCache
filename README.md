@@ -35,22 +35,24 @@ The file is in JSON format and not locked - so easily copied out while running.
 |System.Tile.SmallLogoPath|images\logo.png|Mostly Windows services have this, looks like part of path to the logo/icon image|
 |System.ItemNameDisplay|GitHub Desktop|Basic application display name.|
 
-Additional Notes:  
+### Additional Notes:  
 As I messed with the files in the live folder, they would stop being deleted by the system and the "TimesUsed" and "DateAccessed" columns are zeroed out in future captures. I think if the file is open or edited before next write, the system just creates a new one and loses the count somewhere. I started with one AppCache file at the start of me research and now I have 5 of them and all 5 have empty "TimesUsed" and "DateAccessed" columns.  
-It appears that the "Type:" is based on what data is in the containing field.  
-0 is a list of lists of files/directories.   
-1 is a list of Name, Path, Description data for directories and document type files (.txt, .docx, .csv, .pdf, or files opened in a text editor, ex: hex views of other filetypes).   
-2 is a list containing Name, Path, Description data for directories and any other filetype (ex: .py, .lnk, cloud files)   
-3 is a list of Type 2 data that appears to match CustomDestination jumplist data/style with plaintext titles as they appear on hover.  
-4 is a list of "Frequent", "Recent", "Recently Closed" data of Type 1 or 2.  
-5 is an integer.   
-12 is a string.   
 If the value contains "Points: ", that appears consistent with the "Interaction Count" in the automatic jumplists.  
 If ParsingName starts with `6D809377-6AF0-444B-8957-A3773F02200E` or `7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E` that seems to refer to the folder `C:\Program Files (x86)\`. Confirmed by both registry folder values (`HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`) and looking at the full path of the executable. If it starts with `1AC14E77-02E7-4E5D-B744-2EB1AE5198B7` or `D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27` that seems to refer to System32 or SysWOW64. Last, if it starts with `F38BF404-1D43-42F2-9305-67DE0B28FC23`, it is located in the `C:\Windows` folder.   
 It appears that `Tile.Background` has a common value of `16777215` on my machine for most applications and then some Windows applications have other larger values.  
+It appears that the "Type:" is based on what data is in the containing field.  
+|Type|Hypothesis|
+|---|---|
+|0|list of lists of files/directories|   
+|1|list of Name, Path, Description data for directories and document type files (.txt, .docx, .csv, .pdf, or files opened in a text editor, ex: hex views of other filetypes)|   
+|2|list containing Name, Path, Description data for directories and any other filetype (ex: .py, .lnk, cloud files)|
+|3|list of Type 2 data that appears to match CustomDestination jumplist data/style with plaintext titles as they appear on hover|  
+|4|list of "Frequent", "Recent", "Recently Closed" data of Type 1 or 2|
+|5|an integer|
+|12|a string|
 
 
-Values that don't exist in Jumplists:  
+### Values that don't exist in Jumplists:  
 Adobe Acrobat recent file list  
 Browser recently closed tabs/windows titles (not the website URL but like "Discord", "One Drive", etc.) - combine with CustomDestinations Jumplist for links  
 Slack data identifies the "Workspaces" by name in the list - Ex: "SANS Cyber42" (Similar to browsers, combine with CustomDest for link data)   
