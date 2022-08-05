@@ -1,16 +1,16 @@
 # WinSearchAppCache
 
-While working through an interview process, I came across the old `Microsoft.Windows.Cortana` artifacts and wondered what they would look like on my personal computer that had never configured or given permissions to Cortana. I found AppCache#.txt and within it, I found some data that wasn't available in other artifacts or that was different from other artifacts. As a result, I wrote a simple script to parse out the JSON data to a CSV with slightly cleaner headers for easier sorting. 
+While working through an interview process, I came across the old `Microsoft.Windows.Cortana` artifacts and wondered what they would look like on my personal computer that I had never configured or given permissions to Cortana. I found a directory named DeviceSearchCache and AppCache#.txt. Within the text file, I found some data that wasn't available in other artifacts or that was different from other artifacts. As a result, I wrote a simple script to parse out the JSON data to a CSV with slightly cleaner headers for easier sorting.  
 
-Here is where I'll put my notes and script so far. This is *ongoing research* and a work in progress. 
+Here is where I'll put my notes and script so far. This is *ongoing research* and development - very much a work in progress.  
 
 ## Basic Info AppCache#.txt
 
 > C:\Users\%USERNAME%\AppData\Local\Packages\Microsoft.Windows.Search_cw5n1h2txyewy\LocalState\DeviceSearchCache\AppCache[##################].txt 
 
-The numbers at the end of the filename are the Windows filetime stamp of the iteration of AppCache. It appears that it may write every hour. 
-The file is in JSON format and not locked - so easily copied out while running.   
-As far as the contents, it's pretty straight forward. Only note I have is, it appears that the "Type:" is 5 if the "Value:" is an integer and 12 if it is a string. 
+The numbers at the end of the filename are the Windows filetime stamp of the iteration of AppCache. It writes numerous times throughout the day, however, it is not consistent to the hour.   
+The file is in JSON format and not locked - so easily copied out while running.    
+
 
 ## Actual Data and Hypotheses
 
@@ -35,18 +35,41 @@ As far as the contents, it's pretty straight forward. Only note I have is, it ap
 |System.Tile.SmallLogoPath|images\logo.png|Mostly Windows services have this, looks like part of path to the logo/icon image|
 |System.ItemNameDisplay|GitHub Desktop|Basic application display name.|
 
-Additional Notes:
-If ParsingName starts with `6D809377-6AF0-444B-8957-A3773F02200E` or `7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E` that seems to refer to the folder `C:\Program Files (x86)\`. Confirmed by both registry folder values (`HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`) and looking at the full path of the executable. If it starts with `1AC14E77-02E7-4E5D-B744-2EB1AE5198B7` or `D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27` that seems to refer to System32 or SysWOW64. Last, if it starts with `F38BF404-1D43-42F2-9305-67DE0B28FC23`, it is located in the `C:\Windows` folder.  
-It appears that `Tile.Background` has a common value of `16777215` on my machine for most applications and then some Windows applications have other larger values.
+Additional Notes:  
+As I messed with the files in the live folder, they would stop being deleted by the system and the "TimesUsed" and "DateAccessed" columns are zeroed out in future captures. I think if the file is open or edited before next write, the system just creates a new one and loses the count somewhere. I started with one AppCache file at the start of me research and now I have 5 of them and all 5 have empty "TimesUsed" and "DateAccessed" columns.  
+It appears that the "Type:" is based on what data is in the containing field.  
+0 is a list of lists of files/directories.   
+1 is a list of Name, Path, Description data for directories and document type files (.txt, .docx, .csv, .pdf, or files opened in a text editor, ex: hex views of other filetypes).   
+2 is a list containing Name, Path, Description data for directories and any other filetype (ex: .py, .lnk, cloud files)   
+3 is a list of Type 2 data that appears to match CustomDestination jumplist data/style with plaintext titles as they appear on hover.  
+4 is a list of "Frequent", "Recent", "Recently Closed" data of Type 1 or 2.  
+5 is an integer.   
+12 is a string.   
+If the value contains "Points: ", that appears consistent with the "Interaction Count" in the automatic jumplists.  
+If ParsingName starts with `6D809377-6AF0-444B-8957-A3773F02200E` or `7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E` that seems to refer to the folder `C:\Program Files (x86)\`. Confirmed by both registry folder values (`HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions`) and looking at the full path of the executable. If it starts with `1AC14E77-02E7-4E5D-B744-2EB1AE5198B7` or `D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27` that seems to refer to System32 or SysWOW64. Last, if it starts with `F38BF404-1D43-42F2-9305-67DE0B28FC23`, it is located in the `C:\Windows` folder.   
+It appears that `Tile.Background` has a common value of `16777215` on my machine for most applications and then some Windows applications have other larger values.  
+
+
+Values that don't exist in Jumplists:  
+Adobe Acrobat recent file list  
+Browser recently closed tabs/windows titles (not the website URL but like "Discord", "One Drive", etc.) - combine with CustomDestinations Jumplist for links  
+Slack data identifies the "Workspaces" by name in the list - Ex: "SANS Cyber42" (Similar to browsers, combine with CustomDest for link data)   
+Display names for entries that are unclear in jumplists (Ex: CCleaner shows "AUTOJL" in jumplists but "Run CCleaner" in AppCache)  
+Some Microsoft programs have jumplist entries but not defined - the options are defined in AppCache (Ex: Snip&Sketch has entries in jumplists but none in plaintext, AppCache has "Take a new snip, New snip in 3 seconds, New snip in 10 seconds" as entries  
+File Explorer has an entry that includes last visted directories and the date of visit and possible # of unique visits (requires additional testing)  
+Some apps provide additional data - Ex: PyCharm shows specific .py within a project file where jumplist just shows the general project file   
+
+
+However, I don't see files opened in Browsers in AppCache but that data is in jumplists.
 
 
 ## Settings Cache
-Appears to be default data related to searches that would call Windows data, troubleshooters, and system settings. Not every row has entries in every column and the parser for this breaks at the same row every time I run it and I haven't had time to troubleshoot yet. 
-*Parsed SettingsCache-output.csv will be* **INCOMPLETE**.
+Appears to be default data related to searches that would call Windows data, troubleshooters, and system settings. Not every row has entries in every column and the parser for this breaks at the same row every time I run it and I haven't had time to troubleshoot yet.   
+*Parsed SettingsCache-output.csv will be* **INCOMPLETE**.  
 
 
-Headers are:
-ParsingName, ActivationContext, SmallLogoPath, PageID, SettingID, HostID, Condition, Comment, and HighKeywords
+Headers are:  
+ParsingName, ActivationContext, SmallLogoPath, PageID, SettingID, HostID, Condition, Comment, and HighKeywords  
 
 |Headers|Sample|Hypothesis|
 |---|---|---|
